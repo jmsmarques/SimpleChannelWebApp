@@ -1,0 +1,22 @@
+#displayName {
+  display: flex;
+  align-content: center;
+}
+#displayName form {
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+#welcome {
+  display: block;
+  text-align: center;
+  margin-top: auto;
+}
+
+#create-channel {
+  margin-top: 10px;
+}
+
+/*# sourceMappingURL=styles.css.map */

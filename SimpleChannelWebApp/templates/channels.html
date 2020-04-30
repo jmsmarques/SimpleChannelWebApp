@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block little_script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/channels.js') }}"></script>
+{% endblock %}
+{% block title %}Channels{% endblock %}
+{% block body %} 
+    <h1>Hello {{ user }}</h1>
+    <div class="list-group">
+    {% for channel in channels%}
+        <a href="#" class="channel list-group-item list-group-item-action">{{ channel }}</a>
+    {% endfor %}
+    </div>
+    <button id="create-channel" type="button" class="btn btn-outline-primary">Create Channel</button>
+{% endblock %}
+   
