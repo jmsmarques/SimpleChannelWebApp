@@ -36,15 +36,19 @@ def channels():
     return render_template("channels.html", user=session['user'], channels=created_channels.keys())
 
 @app.route("/channels/<string:channel>")
-def channel():
+def channel(channel):
 
-    selected_channel = created_channels.get(channel)
-    return "TODO"
+    return render_template("channel.html", channel=channel)
 
-@app.route("/create-channel")
-def create_channel():
+@socketio.on("create channel")
+def create_channel(data):
+    name = data["channel"]
 
-    return "TODO"
+    if name in created_channels:
+        emit("channel creation failed", {"message": "Channel already exists!"})
+    else:
+        created_channels[name] = []
+        emit("channel created", {"channel": name}, broadcast=True)
 
 @socketio.on("send message")
 def send_message(data):

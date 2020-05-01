@@ -6,7 +6,7 @@
 {% block title %}Channels{% endblock %}
 {% block body %} 
     <h1>Hello {{ user }}</h1>
-    <div class="list-group">
+    <div id="channel-list" class="list-group">
     {% for channel in channels%}
         <a href="#" class="channel list-group-item list-group-item-action">{{ channel }}</a>
     {% endfor %}
