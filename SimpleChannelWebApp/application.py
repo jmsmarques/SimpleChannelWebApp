@@ -13,7 +13,7 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-created_channels = {"Channel 1": [], "Channel 2": []}
+created_channels = {"Channel 1": [("Marta", "Isto é fixe"),("Isabel","Pois é!")], "Channel 2": []}
 
 @app.route("/")
 def index():
@@ -40,6 +40,11 @@ def channel(channel):
 
     return render_template("channel.html", channel=channel)
 
+@app.route("/get_messages/<string:channel>")
+def get_messages(channel):
+    print(jsonify(created_channels[channel]))
+    return jsonify(created_channels[channel])
+
 @socketio.on("create channel")
 def create_channel(data):
     name = data["channel"]
@@ -55,4 +60,11 @@ def send_message(data):
     message = data['message']
     sender = data['sender']
     channel = data['channel']
+    timestamp = data['timestamp']
+
+    created_channels[channel].append((sender, message, timestamp))
+
+    while created_channels[channel][100] != None:
+        created_channels[channel].pop(0)
+
     emit("receive message", {'message': message, 'sender': sender, 'channel': channel}, broadcast=True)

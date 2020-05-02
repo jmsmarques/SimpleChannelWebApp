@@ -1,7 +1,25 @@
 {% extends "base.html" %}
-        
+
+{% block little_script %}
+    <script type="text/javascript" src="{{ url_for('static', filename='js/channel.js') }}"></script>
+
+    <script>
+        window.localStorage.setItem('channel', '{{ channel }}')
+    </script>
+{% endblock %}
+
 {% block title %}{{ channel }}{% endblock %}
 {% block body %} 
-    <h1>{{ channel }}</h1>
+    <div id="messages" class="form-group">
+        <label for="comment">{{ channel }}:</label>
+        <textarea id="chat-area" class="form-control" rows="10" id="chat" readonly></textarea>
+    </div> 
+    <div id="message-to-send" class="input-group">
+        <input id="message-content" type="text" class="form-control" placeholder="Aa">
+        <div class="input-group-append">
+            <button id="send-message" class="btn btn-primary" type="button">Send</button>
+        </div>
+    </div>
+</div>
 {% endblock %}
    

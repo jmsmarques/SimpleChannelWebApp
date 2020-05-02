@@ -24,4 +24,12 @@
   margin-top: 10px;
 }
 
+#messages {
+  display: inline;
+}
+
+#message-to-send {
+  margin-top: 5px;
+}
+
 /*# sourceMappingURL=styles.css.map */
