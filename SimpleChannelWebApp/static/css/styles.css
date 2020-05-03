@@ -24,12 +24,34 @@
   margin-top: 10px;
 }
 
+#chat-area .my-line, #chat-area .line {
+  margin-inline: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  display: block;
+  max-width: 75%;
+}
+
 #messages {
   display: inline;
 }
 
 #message-to-send {
   margin-top: 5px;
+}
+
+#chat-area {
+  display: inline-block;
+  margin: 5px;
+  position: relative;
+  border: 1px solid grey;
+  width: 95%;
+}
+#chat-area .line {
+  background-color: greenyellow;
+}
+#chat-area .my-line {
+  background-color: #9f9fdb;
 }
 
 /*# sourceMappingURL=styles.css.map */

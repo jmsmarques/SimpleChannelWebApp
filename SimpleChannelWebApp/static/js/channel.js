@@ -4,28 +4,43 @@ document.addEventListener('DOMContentLoaded', () => {
     var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
     const channel = localStorage.getItem('channel');
+    const user = localStorage.getItem('user');
 
     socket.on('receive message', data => {
         if(data["channel"] == channel) {
-            let sender = data["sender"];
             let user = localStorage.getItem('user');
 
-            // if(sender != user) {
-                let message = data["message"];
-                let content = sender + " said: " + message;
+            const msg = document.createElement("div");
 
-                document.querySelector("#chat-area").append(content);
+            const sender = document.createElement("b");
+            if(data["sender"] != user) {
+                msg.setAttribute("class", "row line");
+                sender.innerHTML = data["sender"] + " said: ";
+            }
+            else {
+                msg.setAttribute("class", "row my-line");
+                sender.innerHTML = "You said: ";
+            }
+
+            const timestamp = document.createElement("b");
+            timestamp.innerHTML = " at " + data["timestamp"];
+
+            msg.append(sender);
+            msg.innerHTML += data["message"];
+            msg.append(timestamp);
+
+            document.querySelector("#chat-area").append(msg);
             // }
         }    
     });
 
     function sendMessage() {
         let msgContent = document.querySelector("#message-content");
-        let message = msgContent.value;
-        let user = localStorage.getItem('user');
-        let channel = channel;
+        let message = msgContent.value;    
+        let timestamp = new Date(Number(Date.now())).toString();
+        timestamp = timestamp.split(' ').slice(1, 5).join(' ');
 
-        socket.emit('send message', {"sender": user, "message": message, "channel": channel, "timestamp": Date.now()});
+        socket.emit('send message', {"sender": user, "message": message, "channel": channel, "timestamp": timestamp});
         msgContent.value = "";
 
         // document.querySelector("#chat-area").append(content);

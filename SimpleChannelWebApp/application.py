@@ -19,10 +19,14 @@ created_channels = {"Channel 1": [("Marta", "Isto é fixe"),("Isabel","Pois é!"
 def index():
     try: 
         if session['user'] != None:
-            return render_template("index.html")
+            if(session['channel'] != None):
+                return channel(session['channel'])
+            else:
+                return channels()
         else:
-            return channels()
-    except Exception:
+            return render_template("index.html")
+    except Exception as e:
+        print(f"execption {e}")
         return render_template("index.html")
 
 @app.route("/login", methods=["POST"])
@@ -33,12 +37,14 @@ def login():
 
 @app.route("/channels")
 def channels():
+    print(session['user'])
+    session['channel'] = None
     return render_template("channels.html", user=session['user'], channels=created_channels.keys())
 
 @app.route("/channels/<string:channel>")
 def channel(channel):
-
-    return render_template("channel.html", channel=channel)
+    session['channel'] = channel
+    return render_template("channel.html", channel=channel, channel_content=created_channels[channel], user=session['user'])
 
 @app.route("/get_messages/<string:channel>")
 def get_messages(channel):
@@ -63,8 +69,7 @@ def send_message(data):
     timestamp = data['timestamp']
 
     created_channels[channel].append((sender, message, timestamp))
-
-    while created_channels[channel][100] != None:
+    while len(created_channels[channel]) > 100:
         created_channels[channel].pop(0)
 
-    emit("receive message", {'message': message, 'sender': sender, 'channel': channel}, broadcast=True)
+    emit("receive message", {'message': message, 'sender': sender, 'channel': channel, 'timestamp': timestamp}, broadcast=True)

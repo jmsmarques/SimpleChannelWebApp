@@ -1,3 +1,14 @@
+$margin-line-horizontal: 20px;
+$margin-line-top: 5px;
+
+%line-def {
+    margin-inline: $margin-line-horizontal;
+    margin-top: $margin-line-top;
+    margin-bottom: $margin-line-top;
+    display: block;
+    max-width: 75%;
+}
+
 #messages {
     display: inline;
 }
@@ -5,3 +16,22 @@
 #message-to-send {
     margin-top: 5px;
 }
+
+#chat-area {
+    display: inline-block;
+    margin: 5px;
+    position: relative;
+    border: 1px solid grey;
+    width: 95%;
+
+    .line {
+        @extend %line-def;
+        background-color: greenyellow;
+    }
+
+    .my-line {
+        @extend %line-def;
+        background-color: rgb(159, 159, 219);
+    }
+}
+
