@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const user = localStorage.getItem('user');
 
     socket.on('receive message', data => {
+        let chatArea = document.querySelector("#chat-area");
+
         if(data["channel"] == channel) {
             let user = localStorage.getItem('user');
 
@@ -14,11 +16,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const sender = document.createElement("b");
             if(data["sender"] != user) {
-                msg.setAttribute("class", "row line");
+                msg.setAttribute("class", "line");
                 sender.innerHTML = data["sender"] + " said: ";
             }
             else {
-                msg.setAttribute("class", "row my-line");
+                msg.setAttribute("class", "my-line");
                 sender.innerHTML = "You said: ";
             }
 
@@ -29,8 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
             msg.innerHTML += data["message"];
             msg.append(timestamp);
 
-            document.querySelector("#chat-area").append(msg);
-            // }
+            let maxScroll = chatArea.scrollTopMax; //get max scroll before appending the message
+
+            chatArea.append(msg);
+            
+            //scroll user to bottom when he receives a message
+            if(chatArea.scrollTop == maxScroll || msg.getAttribute("class").includes("my-line")) //check if the user is scrolled to bottom or if he wrote the message himself
+                chatArea.scrollTop = chatArea.scrollTopMax;
         }    
     });
 
@@ -47,6 +54,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.querySelector("#send-message").addEventListener("click", sendMessage);
+    
+    //disable send button while the contents are empty
+    document.querySelector("#send-message").disabled = true;
+    document.querySelector("#message-content").onkeyup = () => {
+        if (document.querySelector("#message-content").value.length > 0)
+            document.querySelector("#send-message").disabled = false;
+        else
+            document.querySelector('#send-message').disabled = true;
+    
+    };
+    //end disable send button
 
     // const request = new XMLHttpRequest();
     // request.open('GET', '/get_messages/' + encodeURIComponent((channel).trim()));

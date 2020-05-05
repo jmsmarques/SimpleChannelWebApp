@@ -25,7 +25,7 @@
 }
 
 #chat-area .my-line, #chat-area .line {
-  margin-inline: 20px;
+  margin-left: 20px;
   margin-top: 5px;
   margin-bottom: 5px;
   display: block;
@@ -46,12 +46,19 @@
   position: relative;
   border: 1px solid grey;
   width: 95%;
+  height: 300px;
+  overflow-y: scroll;
 }
 #chat-area .line {
   background-color: greenyellow;
 }
 #chat-area .my-line {
   background-color: #9f9fdb;
+}
+
+#back-btn {
+  float: right;
+  margin-top: 5px;
 }
 
 /*# sourceMappingURL=styles.css.map */

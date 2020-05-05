@@ -8,12 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
         a.setAttribute("class", "channel list-group-item list-group-item-action");
         a.setAttribute("href", "#");
         a.innerHTML = data["channel"];
+        a.href = "/channels/" + encodeURIComponent((a.innerHTML).trim());
 
         document.querySelector("#channel-list").append(a);
+        removePopup();
     });
 
-
     socket.on('channel creation failed', data => {
+        if((alert = document.querySelector(".alert")) != null)
+            alert.parentNode.removeChild(alert);
+
         const fail = document.createElement("div");
         fail.setAttribute("class", "alert alert-danger");
         fail.setAttribute("role", "alert");
@@ -26,13 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function createChannel() {
         newChannel = document.querySelector("#new-channel-name").value;
         socket.emit('create channel', {"channel": newChannel});
-    }
-
-    // Renders contents of new page in main view.
-    function load_page(name) {
-        const request = new XMLHttpRequest();
-        request.open('GET', `/${name}`);
-        request.send();
     }
 
     history.pushState(null, "channels", "channels");
@@ -61,13 +58,26 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector('#main-body').append(div)
 
             document.querySelector("#create-new-btn").addEventListener("click", createChannel);
+            //disable send button while the contents are empty
+            document.querySelector("#create-new-btn").disabled = true;
+            document.querySelector("#new-channel-name").onkeyup = () => {
+                if (document.querySelector("#new-channel-name").value.length > 0)
+                    document.querySelector("#create-new-btn").disabled = false;
+                else
+                    document.querySelector('#create-new-btn').disabled = true;
+            };
+            //end disable send button
 
-            addChannelDiv = true;
+            addChannelDiv = true; //mark the popup as oppened
         }
         else {
-            let channelDiv = document.querySelector('#add-channel-div');
-            channelDiv.parentNode.removeChild(channelDiv);
-            addChannelDiv = false; 
+            removePopup();
         }
     };
+
+    function removePopup() { //function to remove the popup to create the channel
+        let channelDiv = document.querySelector('#add-channel-div');
+        channelDiv.parentNode.removeChild(channelDiv);
+        addChannelDiv = false; 
+    }
 });

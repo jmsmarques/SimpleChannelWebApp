@@ -13,13 +13,18 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
-created_channels = {"Channel 1": [("Marta", "Isto é fixe"),("Isabel","Pois é!")], "Channel 2": []}
+created_channels = {"Channel 1": [], "Channel 2": []}
 
 @app.route("/")
 def index():
+    logout = request.args.get('logout')
     try: 
-        if session['user'] != None:
-            if(session['channel'] != None):
+        if logout: #logout request
+            session['user'] = None
+            session['channel'] = None
+            return render_template("index.html")
+        if session.get('user') != None:
+            if(session.get('channel') != None):
                 return channel(session['channel'])
             else:
                 return channels()
@@ -37,7 +42,6 @@ def login():
 
 @app.route("/channels")
 def channels():
-    print(session['user'])
     session['channel'] = None
     return render_template("channels.html", user=session['user'], channels=created_channels.keys())
 
@@ -69,7 +73,7 @@ def send_message(data):
     timestamp = data['timestamp']
 
     created_channels[channel].append((sender, message, timestamp))
-    while len(created_channels[channel]) > 100:
+    while len(created_channels[channel]) > 100: #delete the older messages if there are more than 100
         created_channels[channel].pop(0)
 
     emit("receive message", {'message': message, 'sender': sender, 'channel': channel, 'timestamp': timestamp}, broadcast=True)

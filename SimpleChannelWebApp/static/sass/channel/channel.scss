@@ -2,7 +2,7 @@ $margin-line-horizontal: 20px;
 $margin-line-top: 5px;
 
 %line-def {
-    margin-inline: $margin-line-horizontal;
+    margin-left: $margin-line-horizontal;
     margin-top: $margin-line-top;
     margin-bottom: $margin-line-top;
     display: block;
@@ -23,6 +23,8 @@ $margin-line-top: 5px;
     position: relative;
     border: 1px solid grey;
     width: 95%;
+    height: 300px;
+    overflow-y: scroll;
 
     .line {
         @extend %line-def;
@@ -35,3 +37,7 @@ $margin-line-top: 5px;
     }
 }
 
+#back-btn {
+    float:right;
+    margin-top: $margin-line-top;
+}

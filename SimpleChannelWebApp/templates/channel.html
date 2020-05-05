@@ -14,9 +14,9 @@
     <div id="chat-area" class="row">
         {% for content in channel_content %}
             {% if user == content[0] %}
-                <div class="row my-line"><b>You said: </b>{{ content[1] }} <b>at {{ content[2] }}</b></div>
+                <div class="my-line"><b>You said: </b>{{ content[1] }} <b>at {{ content[2] }}</b></div>
             {% else %}
-                <div class="row line"><b>{{ content[0] }} said: </b>{{ content[1] }} <b>at {{ content[2] }}</b></div>
+                <div class="line"><b>{{ content[0] }} said: </b>{{ content[1] }} <b>at {{ content[2] }}</b></div>
             {% endif %}
         {% endfor %}
     </div>
@@ -26,6 +26,7 @@
             <button id="send-message" class="btn btn-primary" type="button">Send</button>
         </div>
     </div>
+    <a href="{{ url_for('channels') }}" id="back-btn" type="button" class="btn btn-primary">Back</a>
 </div>
 {% endblock %}
    
