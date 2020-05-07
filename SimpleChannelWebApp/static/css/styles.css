@@ -55,6 +55,14 @@
 #chat-area .my-line {
   background-color: #9f9fdb;
 }
+#chat-area .my-line img {
+  float: right;
+  height: 20px;
+  margin: 3px;
+}
+#chat-area .my-line img:hover {
+  cursor: pointer;
+}
 
 #back-btn {
   float: right;

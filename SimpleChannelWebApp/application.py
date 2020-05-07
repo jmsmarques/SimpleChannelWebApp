@@ -14,6 +14,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 created_channels = {"Channel 1": [], "Channel 2": []}
+msg_id = 0
 
 @app.route("/")
 def index():
@@ -67,13 +68,30 @@ def create_channel(data):
 
 @socketio.on("send message")
 def send_message(data):
+    global msg_id
     message = data['message']
     sender = data['sender']
     channel = data['channel']
     timestamp = data['timestamp']
 
-    created_channels[channel].append((sender, message, timestamp))
+    created_channels[channel].append((msg_id, sender, message, timestamp))
+    msg_id += 1
+
     while len(created_channels[channel]) > 100: #delete the older messages if there are more than 100
         created_channels[channel].pop(0)
 
-    emit("receive message", {'message': message, 'sender': sender, 'channel': channel, 'timestamp': timestamp}, broadcast=True)
+    emit("receive message", {'msg_id': msg_id - 1, 'message': message, 'sender': sender, 'channel': channel, 'timestamp': timestamp}, broadcast=True)
+
+@socketio.on("delete message")
+def delete_message(data):
+    msg_to_delete = int(data['msg_id'])
+    channel = data['channel']
+    #delete the message from memory
+    for msg in created_channels[channel]:
+        if msg[0] == msg_to_delete:
+            print("fount it")
+            created_channels[channel].remove(msg)
+            break
+    
+    emit("delete message", {"msg_id": msg_to_delete, "channel": channel}, broadcast=True)
+    

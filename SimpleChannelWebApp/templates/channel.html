@@ -13,10 +13,12 @@
     <h1>{{ channel }}:</h1>
     <div id="chat-area" class="row">
         {% for content in channel_content %}
-            {% if user == content[0] %}
-                <div class="my-line"><b>You said: </b>{{ content[1] }} <b>at {{ content[2] }}</b></div>
+            {% if user == content[1] %}
+                <div id="msg-{{ content[0] }}" class="my-line"><b>You said: </b>{{ content[2] }} <b>{{ content[3] }}</b>
+                    <img src="{{ url_for('static', filename='img/trash_can.svg') }}" alt="trash can">
+                </div>
             {% else %}
-                <div class="line"><b>{{ content[0] }} said: </b>{{ content[1] }} <b>at {{ content[2] }}</b></div>
+                <div id="msg-{{ content[0] }}" class="line"><b>{{ content[1] }} said: </b>{{ content[2] }} <b>{{ content[3] }}</b></div>
             {% endif %}
         {% endfor %}
     </div>
